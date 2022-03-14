@@ -13,6 +13,7 @@ const { crearUsuario,
         actualizarUsuario, 
         getUsuarios, 
         eliminarUsuario } = require('../controllers/user.controller');
+        
 const { esRolValido, 
         emailExiste, 
         rutExiste, 
