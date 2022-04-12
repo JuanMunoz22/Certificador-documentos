@@ -12,7 +12,8 @@ const {
 const { crearUsuario, 
         actualizarUsuario, 
         getUsuarios, 
-        eliminarUsuario } = require('../controllers/user.controller');
+        eliminarUsuario, 
+        activarEmail} = require('../controllers/user.controller');
         
 const { esRolValido, 
         emailExiste, 
@@ -38,6 +39,12 @@ router.post('/', [
     check('rol').custom(esRolValido), 
     validarCampos,
 ],crearUsuario)
+
+//Ruta verificar usuario
+router.put('/validate/:id', [
+    check('id').custom(rutValido),
+    validarCampos
+],activarEmail);
 
 //Ruta Actualizar Usuario
 router.put('/:id', [

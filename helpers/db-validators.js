@@ -2,6 +2,7 @@ const Role = require('../models/role.model');
 const Usuario = require('../models/usuario.model');
 
 const {validateRUT, clearRUT} = require('validar-rut');
+const { Documento } = require('../models');
 
 
 const esRolValido = async(rol = '') => {
@@ -47,12 +48,41 @@ const existeUsuarioPorId = async(id) => {
     }
 }
 
+const existeDocumentoPorHash = async(hash = '') => {
+    //Verificar si existen documentos por el hash indicado
+    const existeDocumento = await Documento.findOne({hash});
+    if(!existeDocumento){
+        throw new Error(`El Hash: ${hash} no existe`)
+    }
+}
+
+const existeDocumentoPorId = async(id) => {
+    //Verificar si existe el documento
+    const existeID = await Documento.findById(id);
+    if(!existeID){
+        throw new Error(`El documento con id: ${id} no existe`);
+    }
+}
+
+//Validar colecciones permitidas
+const coleccionesPermitidas = (coleccion = '', colecciones = []) => {
+    const incluida = colecciones.includes(coleccion);
+    if(!incluida){
+        throw new Error(`La coleccion ${coleccion} no es permitida`);
+    }
+
+    return true;
+}
+
 
 
 module.exports = {
+    coleccionesPermitidas,
     esRolValido,
     emailExiste,
     existeUsuarioPorId,
+    existeDocumentoPorHash,
+    existeDocumentoPorId,
     rutExiste,
     rutValido
 }
