@@ -83,7 +83,7 @@ const activarEmail = async(req, res) => {
     const {id} = req.params;
     const rut = id;
 
-    const usuario = await Usuario.findOneAndUpdate({rut}, {estado: true}, {new: true});
+    const usuario = await Usuario.findOneAndUpdate({rut}, {estado: true});
     if(!usuario){
         return res.status(400).json({
             msg: 'No se puede validar este rut'
