@@ -4,6 +4,9 @@ const fileUpload = require('express-fileupload');
 
 const dbConnection = require('../database/config');
 
+const path = require('path');
+
+
 class Server{
 
     constructor(){
@@ -15,7 +18,7 @@ class Server{
             auth:     '/api/auth',
             document: '/api/document',
             usuarios: '/api/usuarios',
-            uploads:      '/api/uploads'
+            uploads:  '/api/uploads'
         }
 
         //Coneccion a base de datos
@@ -26,6 +29,10 @@ class Server{
 
         //Rutas de la aplicacion
         this.routes();
+
+        this.app.get('*', function(req, res) {
+            res.sendFile(path.resolve('./public/index.html'))          
+        });
     }
 
     async conectarDB(){
@@ -56,8 +63,10 @@ class Server{
         this.app.use(this.paths.auth, require('../routes/auth.routes'));
         this.app.use(this.paths.usuarios, require('../routes/user.routes'));
         this.app.use(this.paths.document, require('../routes/document.routes'));
-        this.app.use(this.paths.uploads, require('../routes/upload.routes'))
+        this.app.use(this.paths.uploads, require('../routes/upload.routes'));
     }
+
+
 
     //Escuchar
     listen(){
