@@ -210,7 +210,7 @@ const verificarDocumento = async(req, res) => {
    })
   }  
   console.log(documentoDB.path);
-  res.sendFile(documentoDB.path);
+  res.json({path: documentoDB.path});
 }
 
 const verificarDocumentoHash = async(req, res) => {
