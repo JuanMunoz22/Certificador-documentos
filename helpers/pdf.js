@@ -1,7 +1,6 @@
 const {PDFDocument, StandardFonts, rgb, PDFPage} = require('pdf-lib')
 const fs = require('fs');
 
-
 const certificarPDF = async(file, nombre, lastDate, protectDate, lastHash, hash) => {
 
     //Crear nuevo documento PDF y pagina
@@ -53,7 +52,7 @@ const certificarPDF = async(file, nombre, lastDate, protectDate, lastHash, hash)
 
     fs.writeFileSync(`./uploads/documentos/${hash}.pdf`, await doc.save());
 
-    return true;
+    return doc;
 }
 
 

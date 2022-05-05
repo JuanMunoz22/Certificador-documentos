@@ -144,6 +144,8 @@ const proteguerDocumento = async(req, res) => {
     protectDate: fecha()
   }
 
+
+
   const hash = crearHash(data.nombre, data.size, data.md5);
   
   const documentoDB = await Documento.findOne({hash});
@@ -156,6 +158,8 @@ const proteguerDocumento = async(req, res) => {
   //Guardar en servidor
   try {
     const nombre = await subirArchivo(req.files, ['pdf'], 'documentos', hash);
+    
+    const file = req.files.archivo;
 
     //Data a guardar
     const documentInfo = {
@@ -179,6 +183,20 @@ const proteguerDocumento = async(req, res) => {
       })
     }
 
+    const pathAntiguo = documentInfo.path;
+
+    //Subir documento a cloudinary
+    const {secure_url} = await cloudinary.uploader.upload(documentInfo.path, {
+      folder: 'documentos/',
+      public_id: documentInfo.hash
+    });
+    documentInfo.path = secure_url;
+
+    //Eliminar archivo del servidor
+    if(fs.existsSync(pathAntiguo)){
+      fs.unlinkSync(pathAntiguo);
+    }
+
     //Guardar en DB
     const saveDocument = new Documento(documentInfo);
     await saveDocument.save()
@@ -186,8 +204,9 @@ const proteguerDocumento = async(req, res) => {
     return res.status(201).json(saveDocument); 
   
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
-      msg: 'Error al certificar documento, solo se permiten archivos PDF'
+      msg: 'Error al certificar documento, solo se permiten archivos PDF 2'
     })
   }
 
@@ -209,8 +228,8 @@ const verificarDocumento = async(req, res) => {
       msg: `El documento ${hash} no esta proteguido`
    })
   }  
-  console.log(documentoDB.path);
-  res.sendFile(documentoDB.path);
+
+  res.json({url: documentoDB.path});
 }
 
 const verificarDocumentoHash = async(req, res) => {
@@ -223,7 +242,7 @@ const verificarDocumentoHash = async(req, res) => {
       msg: `El hash: ${hash} no existe`
     })
   }else{
-    return res.sendFile(verify.path);
+    return res.json({url: verify.path});
   }
 
 }
@@ -236,7 +255,7 @@ module.exports = {
   mostrarImagen,
   proteguerDocumento,
   verificarDocumento,
-  verificarDocumentoHash
+  verificarDocumentoHash,
 }
 
 
