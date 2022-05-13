@@ -100,6 +100,7 @@ const actualizarUsuario = async(req, res) => {
 
     //TODO Validar contra base de datos
     if(password){
+        
        //Encriptar la contraseña
         const salt = bcryptjs.genSaltSync();
         resto.password = bcryptjs.hashSync(password, salt); 

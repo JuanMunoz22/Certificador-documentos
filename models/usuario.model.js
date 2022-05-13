@@ -28,6 +28,14 @@ const UsuarioSchema = Schema({
         required: [true, 'El rol es obligatorio'],
         emun: ['ADMIN_ROLE', 'USER_ROLE']
     },
+    documentos: {
+        type: Number,
+        default: 0
+    },
+    saldo: {
+        type: Number,
+        default: 0
+    },
     estado: {
         type: Boolean,
         default: false
