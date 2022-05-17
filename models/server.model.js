@@ -18,7 +18,8 @@ class Server{
             auth:     '/api/auth',
             document: '/api/document',
             usuarios: '/api/usuarios',
-            uploads:  '/api/uploads'
+            uploads:  '/api/uploads',
+            verificados: 'api/verificados'
         }
 
         //Coneccion a base de datos
@@ -64,6 +65,7 @@ class Server{
         this.app.use(this.paths.usuarios, require('../routes/user.routes'));
         this.app.use(this.paths.document, require('../routes/document.routes'));
         this.app.use(this.paths.uploads, require('../routes/upload.routes'));
+        this.app.use(this.paths.verificados, require('../routes/verificados.routes'));
     }
 
 
